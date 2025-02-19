@@ -63,7 +63,7 @@ export class Library {
       page: entry.page,
       publisher: entry.publisher,
       publisherPlace: entry.publisherPlace,
-      title: entry.title.replace(/:/g, ' --- '),
+      title: '"'+entry.title+'"',
       titleShort: entry.titleShort,
       URL: entry.URL,
       year: entry.year?.toString(),
