@@ -27,7 +27,7 @@ const expectedRender: Record<string, string>[] = [
     note: 'This is a test note with some <b>formatting</b>.',
     page: '1-29',
     title:
-      'An Overview of Biomineralization Processes and the Problem of the Vital Effect',
+      '"An Overview of Biomineralization Processes and the Problem of the Vital Effect"',
     URL: 'http://rimg.geoscienceworld.org/cgi/doi/10.2113/0540001',
     year: '2003',
     zoteroSelectURI: 'zotero://select/items/@Weiner2003',
@@ -44,7 +44,7 @@ const expectedRender: Record<string, string>[] = [
     eprinttype: 'arxiv',
     page: undefined,
     title:
-      'Blackbox meets blackbox: Representational Similarity and Stability Analysis of Neural Language Models and Brains',
+      '"Blackbox meets blackbox: Representational Similarity and Stability Analysis of Neural Language Models and Brains"',
     titleShort: "Blackbox meets blackbox",
     URL: 'http://arxiv.org/abs/1906.01539',
     year: '2019',
@@ -59,7 +59,7 @@ const expectedRender: Record<string, string>[] = [
     DOI: '10.1016/j.conb.2017.08.010',
     page: '219–227',
     title:
-      'With or without you: Predictive coding and Bayesian inference in the brain',
+      '"With or without you: Predictive coding and Bayesian inference in the brain"',
     URL: 'http://www.sciencedirect.com/science/article/pii/S0959438817300454',
     year: '2017',
     zoteroSelectURI: 'zotero://select/items/@aitchison2017you',
@@ -71,7 +71,7 @@ const expectedRender: Record<string, string>[] = [
     containerTitle: undefined,
     DOI: undefined,
     page: '1–4',
-    title: 'Factored Neural Language Models',
+    title: '"Factored Neural Language Models"',
     URL: 'http://aclasb.dfki.de/nlp/bib/N06-2001',
     year: '2006',
     zoteroSelectURI: 'zotero://select/items/@alexandrescu2006factored',
@@ -85,7 +85,7 @@ const expectedRender: Record<string, string>[] = [
     DOI: '10.1007/978-3-030-34308-8',
     page: undefined,
     title:
-      'Perspectives on Causation: Selected Papers from the Jerusalem 2017 Workshop',
+      '"Perspectives on Causation: Selected Papers from the Jerusalem 2017 Workshop"',
     URL: 'http://link.springer.com/10.1007/978-3-030-34308-8',
     year: '2020',
     zoteroSelectURI: 'zotero://select/items/@bar-ashersiegal2020perspectives',
