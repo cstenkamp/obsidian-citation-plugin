@@ -5,7 +5,7 @@ This plugin for [Obsidian](https://obsidian.md) integrates your academic referen
 ![](screenshot.png)
 
 The plugin supports reading bibliographies in [BibTeX / BibLaTeX `.bib` format][4] and [CSL-JSON format][1].
-
+.
 ## Setup
 
 You can install this plugin via the Obsidian "Third-party plugin interface." It requires Obsidian 0.9.20 or higher.
