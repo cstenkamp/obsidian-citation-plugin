@@ -268,7 +268,7 @@ export class InsertZoteroLinkModal extends SearchModal {
         command: '↵',
         purpose: 'to insert Zotero Link to pdf',
       },
-      { command: 'shift ↵', purpose: 'to insert Zoter Link to entry' },
+      { command: 'shift ↵', purpose: 'to insert Zotero Link to entry' },
       { command: 'esc', purpose: 'to dismiss' },
     ]);
   }

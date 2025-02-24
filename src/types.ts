@@ -267,6 +267,7 @@ export interface EntryDataCSL {
   title?: string;
   'title-short'?: string;
   URL?: string;
+  files?: string[];
 }
 
 export class EntryCSLAdapter extends Entry {
@@ -276,7 +277,6 @@ export class EntryCSLAdapter extends Entry {
 
   eprint: string = null;
   eprinttype: string = null;
-  files: string[] = null;
 
   get id() {
     return this.data.id;
@@ -290,6 +290,10 @@ export class EntryCSLAdapter extends Entry {
   }
   get author() {
     return this.data.author;
+  }
+
+  get files(): string[] {
+    return this.data.files;
   }
 
   get authorString(): string | null {

@@ -75,3 +75,17 @@ MIT License.
 [2]: https://retorque.re/zotero-better-bibtex/
 [3]: https://pandoc.org/MANUAL.html#extension-citations
 [4]: http://www.bibtex.org/
+
+
+---
+
+## Updates Chris
+
+Added the fixes from [PR #248](https://github.com/hans/obsidian-citation-plugin/pull/248), adding the command "Insert Zotero link to PDF or entry".  
+This needed some fixing in turn. Now works with the BetterBibtex-Export format "BetterCSL-JSON" with the following [postscript](https://retorque.re/zotero-better-bibtex/exporting/scripting/) to add files:
+```
+if (Translator.BetterCSLJSON) {
+    let pdf = item.attachments.find(a => a.localPath && a.localPath.endsWith('.pdf'));
+    if (pdf) reference.file = pdf.localPath;
+    reference.files = item.attachments.filter(i => i.localPath).map(i => i.localPath.replace(/\\/g, '/'));
+}
