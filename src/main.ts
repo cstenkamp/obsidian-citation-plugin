@@ -5,6 +5,9 @@ import {
   normalizePath,
   Plugin,
   TFile,
+  Menu,
+  Notice,
+  Command
 } from 'obsidian';
 import * as path from 'path';
 import * as chokidar from 'chokidar';
@@ -98,7 +101,57 @@ export default class CitationPlugin extends Plugin {
     await this.saveData(this.settings);
   }
 
+	//add command to right-click menu
+	addMenuItem(name) {
+		this.registerEvent(
+			this.app.workspace.on("editor-menu", (menu) => {
+				menu.addItem((item) => {
+					item.setTitle(name)
+					.onClick(() => {
+						//@ts-ignore
+            // https://www.reddit.com/r/ObsidianMD/comments/188fygp/how_to_get_the_current_line_which_im_writing_in/
+            const editor = this.app.workspace.getActiveViewOfType(MarkdownView)?.editor;
+            if (!editor) return;
+
+            const cursor = editor.getCursor();
+            const lineText = editor.getLine(cursor.line);
+            if (!lineText) return;
+            // Use regex to find the word at the cursor position
+            const wordMatch = lineText.match(/\b\w+\b/g);
+            if (!wordMatch) return;
+            // Find the word under the cursor
+            let wordAtCursor = "";
+            let startIndex = 0;
+            for (const word of wordMatch) {
+                const wordStart = lineText.indexOf(word, startIndex);
+                const wordEnd = wordStart + word.length;
+                if (cursor.ch >= wordStart && cursor.ch <= wordEnd) {
+                    wordAtCursor = word;
+                    break;
+                }
+                startIndex = wordEnd; // Ensure we don't match the same word multiple times
+            }
+            console.log("Word at cursor:", wordAtCursor);
+
+            // Check if the extracted word is a citekey
+            if (this.library && (wordAtCursor in this.library.entries)) {
+                console.log(`Citekey found: ${wordAtCursor}`);
+                const zoteroUrl = this.library.entries[wordAtCursor].zoteroPdfURI;
+                console.log(`Opening Zotero: ${zoteroUrl}`);
+                window.open(zoteroUrl);
+            } else {
+                console.log(`No matching citekey found for: ${wordAtCursor}`);
+                new Notice(`No matching citation found for ${wordAtCursor}`);
+            }
+
+					});
+				});
+			})
+		);
+	}
+
   onload(): void {
+    this.addMenuItem("Open Paper in Zotero");
     this.loadSettings().then(() => this.init());
   }
 
