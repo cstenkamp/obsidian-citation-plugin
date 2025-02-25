@@ -5,9 +5,10 @@ import {
   normalizePath,
   Plugin,
   TFile,
-  Menu,
   Notice,
-  Command
+  type FileView,
+  type WorkspaceLeaf,
+  addIcon,
 } from 'obsidian';
 import * as path from 'path';
 import * as chokidar from 'chokidar';
@@ -102,11 +103,12 @@ export default class CitationPlugin extends Plugin {
   }
 
 	//add command to right-click menu
-	addMenuItem(name) {
+	addMenuItem(name, icon) {
 		this.registerEvent(
 			this.app.workspace.on("editor-menu", (menu) => {
 				menu.addItem((item) => {
 					item.setTitle(name)
+          .setIcon(icon)
 					.onClick(() => {
 						//@ts-ignore
             // https://www.reddit.com/r/ObsidianMD/comments/188fygp/how_to_get_the_current_line_which_im_writing_in/
@@ -143,7 +145,6 @@ export default class CitationPlugin extends Plugin {
                 console.log(`No matching citekey found for: ${wordAtCursor}`);
                 new Notice(`No matching citation found for ${wordAtCursor}`);
             }
-
 					});
 				});
 			})
@@ -151,9 +152,68 @@ export default class CitationPlugin extends Plugin {
 	}
 
   onload(): void {
-    this.addMenuItem("Open Paper in Zotero");
     this.loadSettings().then(() => this.init());
+
+    // Chris Open-Paper-In-Zotero additions, TODO make function
+    addIcon('letter-z', `<polyline points="29 19 86 19 29 96 86 96" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`);
+    this.addMenuItem("Open Paper in Zotero", "letter-z");
+
+    this.registerEvent(
+			this.app.workspace.on("active-leaf-change", (leaf) => {
+				this.addButtonIfMatching(leaf);
+			})
+		);
+
+    this.registerEvent(
+      this.app.workspace.on('file-menu', (menu, file) => {
+        menu.addItem((item) => {
+          item
+            .setTitle('Open Paper in Zotero')
+            .setIcon('letter-z')
+            .onClick(async () => {
+              if (file && this.library && (file.name.slice(0,-3) in this.library.entries)) {
+                const zoteroUrl = this.library.entries[file.name.slice(0,-3)].zoteroPdfURI;
+                new Notice(`Opening ${zoteroUrl}`);
+                window.open(zoteroUrl);
+              }
+            });
+        });
+      })
+    );
   }
+
+	onunload() {
+		console.log(`[${this.manifest.name}] Unloaded`);
+		this.removeButton();
+	}
+
+  addButtonIfMatching(leaf?: WorkspaceLeaf | null) {
+		if (!leaf) return;
+		const file = leaf.view.file;
+    if (!file || !this.library || !(leaf.view.file.basename in this.library.entries)) {
+			this.removeButton();
+			return;
+		}
+    console.log(`Filename is a Citekey: ${leaf.view.file.basename}`);
+    const zoteroUrl = this.library.entries[leaf.view.file.basename].zoteroPdfURI;
+    console.log(zoteroUrl);
+
+		const view = leaf.view as FileView;
+		if (!view || view.getState().mode !== "source") return; // TODO do I want this
+		// Ensure button is not duplicated
+		if (document.querySelector(".custom-header-button")) return;
+    const button = view.addAction("letter-z", "Open in Zotero", () => {
+			new Notice(`Opening ${zoteroUrl}`);
+      window.open(zoteroUrl);
+		});
+		button.addClass("custom-header-button");
+	}
+
+	removeButton() {
+		const button = document.querySelector(".custom-header-button");
+		if (button) button.remove();
+	}
+
 
   async init(): Promise<void> {
     if (this.settings.citationExportPath) {
